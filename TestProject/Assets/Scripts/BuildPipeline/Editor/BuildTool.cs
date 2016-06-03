@@ -23,7 +23,7 @@ public static class BuildTool {
 
         //ACUTALLY MAKE THE BUILD
         BuildPipeline.BuildPlayer(scenesToBuild,
-                                  buildToLocation, //+ "" + projectName + ".exe",
+                                  buildToLocation + "" + projectName + ".exe",
                                   BuildTarget.StandaloneWindows64,
                                   BuildOptions.Il2CPP);
 
