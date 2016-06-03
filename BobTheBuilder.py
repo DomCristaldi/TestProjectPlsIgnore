@@ -2,48 +2,58 @@ from subprocess import call
 import os
 from contextlib import contextmanager
 
-from datetime import datetime, date
+from datetime import datetime
 import time
 
 #from threading import Timer
-import schedule #must install Schedule via pip or PyPI
-
+import schedule #must install Schedule via pip or PyPI (python -m pip install schedule==0.3.2)
+                                                                                        #(the version this was mamde with)
 from tkinter import *
+
+import getpass
+
 
 #
 # class BuildAutomator:
 #     def __init__(self):
 #         self.testNum = 4
 
-#TODO: add a link to the Log Files for easy lookup if something broke
-#TODO: UI?
+#TODO: Don't make build if the Pull doesn't have anything new
+#TODO: set values via an .ini file?
+#TODO: allow for platform build specification (win64, linux32, android, etc)
+#TODO: allow for build options (currently set to IL2CPP, but could set to None, Developer Build, Link Profiler, etc)
+#TODO: make it easy to get to Log Files if something broke (already have Link setup to work on a per-user level)
+#TODO: UI? (modify that .ini file, display current state of script)
 
 def getKickoffTime():
     return datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
+isRunning = False
+
 hoursBetweenBuilds = 5
 buildTime = getKickoffTime()
 
-
+#will be there by installation
 pathToUnityExec = "C:\\Program Files\\Unity\\Editor"
+pathToUnityLogFiles = "C:\\Users\\{0}\\AppData\\Local\\Unity\\Editor".format((getpass.getuser()))#string format in the current user
+
+#USER DEFINED
 pathToUnityProject = "D:\\Repositories\\Git\\TestProjectBehind\\TestProject"
+
+pathToRepo = "D:\\Repositories\\Git\\TestProjectBehind"
+remote = "origin"
+branch = "master"
 
 platformToBuildTo = "-buildWindows64Player"
 pathToPlaceBuild = "D:\\Builds\\TestBuild\\"
 projectName = "testName"
 
-pathToRepo = "D:\\Repositories\\Git\\TestProjectBehind"
-# pathToRepo = "D:\Repositories\Git\TestProjectPlsIgnore"
-remote = "origin"
-branch = "master"
 
 #GET THE LATEST CHANGES FROM THE REPO
 def updateRepo():
     #enter repository directory so we can call git commands
     os.chdir(pathToRepo)
-
-    #call ("dir", shell = TRUE) #print out for debugging so we know where we are
 
     #update to the latest version of the repository
     call (["git", "pull", remote], shell = TRUE)    #pull latest changes
@@ -54,22 +64,24 @@ def buildUnityProject():
     #navigate to the install location of Unity so we can use command line build
     os.chdir(pathToUnityExec);
 
+    #call the Build command inside the Unity Project and pass it extra parameters it's expecting  (where we build)       (what to anme it)
     call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame", pathToPlaceBuild, projectName + "_" + buildTime], shell = TRUE)
 
 
 #UMBRELLA FUNCTION THAT DOES BUILD OPERATIONS AND PRINTS PROGRESS
 def performAutomatedBuild():
-    #print(time.strftime(%Y))
     print("\n---------------------------------------\n")
-    print("Retrieving latest build from Remote: {0}, Branch {1}".format(remote.encode("utf-8"), branch.encode("utf-8")))
+    print("Retrieving latest build from Remote: {0}, Branch {1}".format(remote, branch))
     print("\n---------------------------------------\n")
 
+    #CALL GIT TO GET TEH LATEST VERSION OF THE PROJECT
     updateRepo()
 
     print("\n---------------------------------------\n")
     print("Repo Update Complete, Attempting to Build Project")
     print("\n---------------------------------------\n")
 
+    #CALL UNITY TO BUILD THE PROJECT
     buildUnityProject()
 
     print("\n---------------------------------------\n")
@@ -77,20 +89,20 @@ def performAutomatedBuild():
     print("\n---------------------------------------\n")
 
 
-testNum = 0
-def addNumber():
-    global testNum
-    testNum += 1
-    print (testNum)
+# testNum = 0
+# def addNumber():
+#     global testNum
+#     testNum += 1
+#     print (testNum)
 
 #schedule.every(2).seconds.do(addNumber)
-schedule.every(20).seconds.do(performAutomatedBuild)
 # performAutomatedBuild()
 #schedule.every(hoursBetweenBuilds).hour.do(performAutomatedBuild)
 
-while True:
+schedule.every(hoursBetweenBuilds).hours.do(performAutomatedBuild)
+
+while isRunning:
     schedule.run_pending()
-    #time.sleep(1)
 
 
 # call ("git", shell = TRUE)
