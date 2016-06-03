@@ -11,7 +11,8 @@ pathToUnityExec = "C:\\Program Files\\Unity\\Editor"
 pathToUnityProject = "D:\\Repositories\\Git\\TestProjectBehind\\TestProject"
 
 platformToBuildTo = "-buildWindows64Player"
-pathToPlaceBuild = "D:\\Builds\\TestBuild"
+pathToPlaceBuild = "D:\\Builds\\TestBuild\\"
+projectName = "testName"
 
 pathToRepo = "D:\\Repositories\\Git\\TestProjectBehind"
 # pathToRepo = "D:\Repositories\Git\TestProjectPlsIgnore"
@@ -34,9 +35,9 @@ def buildUnityProject():
     os.chdir(pathToUnityExec);
 
     #call (["Unity.exe", platformToBuildTo, pathToUnityProject])
-    call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame", pathToPlaceBuild])
+    call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame", pathToPlaceBuild, projectName], shell = TRUE)
 
-#updateRepo()
+updateRepo()
 buildUnityProject()
 
 # call ("git", shell = TRUE)
