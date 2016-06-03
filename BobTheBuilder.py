@@ -5,7 +5,8 @@ from contextlib import contextmanager
 from datetime import datetime, date
 import time
 
-from threading import Timer
+#from threading import Timer
+import schedule #must install Schedule via pip or PyPI
 
 from tkinter import *
 
@@ -21,6 +22,7 @@ def getKickoffTime():
     return datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
+hoursBetweenBuilds = 5
 buildTime = getKickoffTime()
 
 
@@ -41,7 +43,7 @@ def updateRepo():
     #enter repository directory so we can call git commands
     os.chdir(pathToRepo)
 
-    call ("dir", shell = TRUE) #print out for debugging so we know where we are
+    #call ("dir", shell = TRUE) #print out for debugging so we know where we are
 
     #update to the latest version of the repository
     call (["git", "pull", remote], shell = TRUE)    #pull latest changes
@@ -55,23 +57,40 @@ def buildUnityProject():
     call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame", pathToPlaceBuild, projectName + "_" + buildTime], shell = TRUE)
 
 
+#UMBRELLA FUNCTION THAT DOES BUILD OPERATIONS AND PRINTS PROGRESS
+def performAutomatedBuild():
+    #print(time.strftime(%Y))
+    print("\n---------------------------------------\n")
+    print("Retrieving latest build from Remote: {0}, Branch {1}".format(remote.encode("utf-8"), branch.encode("utf-8")))
+    print("\n---------------------------------------\n")
 
-#print(time.strftime(%Y))
-print("\n---------------------------------------\n")
-print("Retrieving latest build from Remote: {0}, Branch {1}".format(remote.encode("utf-8"), branch.encode("utf-8")))
-print("\n---------------------------------------\n")
+    updateRepo()
 
-updateRepo()
+    print("\n---------------------------------------\n")
+    print("Repo Update Complete, Attempting to Build Project")
+    print("\n---------------------------------------\n")
 
-print("\n---------------------------------------\n")
-print("Repo Update Complete, Attempting to Build Project")
-print("\n---------------------------------------\n")
+    buildUnityProject()
 
-buildUnityProject()
+    print("\n---------------------------------------\n")
+    print("BUILD COMPLETE")
+    print("\n---------------------------------------\n")
 
-print("\n---------------------------------------\n")
-print("BUILD COMPLETE")
-print("\n---------------------------------------\n")
+
+testNum = 0
+def addNumber():
+    global testNum
+    testNum += 1
+    print (testNum)
+
+#schedule.every(2).seconds.do(addNumber)
+schedule.every(20).seconds.do(performAutomatedBuild)
+# performAutomatedBuild()
+#schedule.every(hoursBetweenBuilds).hour.do(performAutomatedBuild)
+
+while True:
+    schedule.run_pending()
+    #time.sleep(1)
 
 
 # call ("git", shell = TRUE)
