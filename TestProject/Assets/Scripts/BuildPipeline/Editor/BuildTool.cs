@@ -8,11 +8,20 @@ public static class BuildTool {
     public static void BuildStandaloneGame() {
         string[] args = Environment.GetCommandLineArgs();
 
-        Debug.Log("-------Command Line args-------\n");
-        foreach (string s in args) {
-            Debug.Log(s);
+        string[] scenesToBuild = new string[] { "Assets/Scenes/test.unity" };
+        string buildToLocation = "";
+
+
+        for (int i = 0; i < args.Length; ++i) {
+            if (args[i] == "BuildTool.BuildStandaloneGame") {
+                buildToLocation = args[i + 1];
+            }
         }
-        Debug.Log("---------------------------------");
+
+        BuildPipeline.BuildPlayer(scenesToBuild,
+                                  buildToLocation,
+                                  BuildTarget.StandaloneWindows64,
+                                  BuildOptions.None);
 
     }
 
