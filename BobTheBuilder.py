@@ -8,12 +8,12 @@ from threading import Timer
 from tkinter import *
 
 
-pathToRepo = "D:\Repositories\Git\AutomatedBuildsTest"
+pathToRepo = "D:\Repositories\Git\TestProjectBehind"
+# pathToRepo = "D:\Repositories\Git\TestProjectPlsIgnore"
+
+remote = "origin"
 branch = "master"
 
-def cd(newDir):
-    prevDir = os.getcwd()
-    os.chdir(os.path.expanduser(newDir))
 
 def start():
     # call ("cd " + pathToRepo, shell = TRUE)
@@ -21,10 +21,10 @@ def start():
     # with cd(pathToRepo):
     #call ("dir", shell = TRUE)
 
-    os.chdir(pathToRepo)
-    #call ("dir", shell = TRUE)
-
-
+    os.chdir(pathToRepo) #get to the directory of the repository
+    call ("dir", shell = TRUE)
+    call (["git", "pull", remote], shell = TRUE)
+    call (["git", "checkout", branch], shell = TRUE)
 
 start()
 
