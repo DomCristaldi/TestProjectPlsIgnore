@@ -7,13 +7,13 @@ from threading import Timer
 
 from tkinter import *
 
-pathToUnityExecutable = "C:\Program Files\Unity\Editor"
-pathToUnityProject = "D:\Repositories\Git\TestProjectBehind\TestProject"
+pathToUnityExec = "C:\\Program Files\\Unity\\Editor"
+pathToUnityProject = "D:\\Repositories\\Git\\TestProjectBehind\\TestProject"
 
 platformToBuildTo = "-buildWindows64Player"
 pathToPlaceBuild = ""
 
-pathToRepo = "D:\Repositories\Git\TestProjectBehind"
+pathToRepo = "D:\\Repositories\\Git\\TestProjectBehind"
 # pathToRepo = "D:\Repositories\Git\TestProjectPlsIgnore"
 remote = "origin"
 branch = "master"
@@ -31,13 +31,13 @@ def updateRepo():
 
 def buildUnityProject():
     #navigate to the install location of Unity so we can use command line build
-    os.chdir(pathToUnityExecutable);
+    os.chdir(pathToUnityExec);
 
     #call (["Unity.exe", platformToBuildTo, pathToUnityProject])
-    call (["Unity.exe", "-quit", "-batchmod" "-executemethod BuildTool.BuildStandaloneGame"])
+    call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame"])
 
 #updateRepo()
-
+buildUnityProject()
 
 # call ("git", shell = TRUE)
 
