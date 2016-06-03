@@ -14,7 +14,7 @@ First, the Dependencies:
     Python (I used 3.5.1) https://www.python.org/downloads/
       Schedule (Install it with pip or PyPI, I used 0.3.2) https://pypi.python.org/pypi/schedule
     Unity3D (I used 5.3.5f1, but it might be able to work with older versions) http://unity3d.com/get-unity
-    Git (not like Sourcetreek or GitKraken, you're gonna command line git) https://git-scm.com/
+    Git (not like Sourcetree or GitKraken, you're gonna command line git) https://git-scm.com/
 
 Go into BobTheBuilder.py
 Under #USER DEFINED
