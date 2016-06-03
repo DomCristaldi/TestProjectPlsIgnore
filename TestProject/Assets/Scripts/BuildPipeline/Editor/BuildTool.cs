@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEditor;
@@ -6,11 +6,19 @@ using UnityEditor;
 public static class BuildTool {
 
     public static void BuildStandaloneGame() {
-        string[] args = Environment.GetCommandLineArgs();
+        string[] args = System.Environment.GetCommandLineArgs();
 
-        string[] scenesToBuild = new string[] { "Assets/Scenes/test.unity" };
+        List<string> scenesToBuild = new List<string>();//contains paths of scenes in Editor Build Settings
+
         string buildToLocation = "";
         string projectName = "";
+
+
+        //RETRIEVE ACTIVE SCENES FROM BUILD SETTINGS
+        foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes) {
+            if (scene.enabled == false) { continue; }
+            scenesToBuild.Add(scene.path);
+        }
 
 
         //PARSE THE COMMAND LINE ARGUMENTS FOR BUILD-UNIQUE INFO
@@ -22,7 +30,7 @@ public static class BuildTool {
         }
 
         //ACUTALLY MAKE THE BUILD
-        BuildPipeline.BuildPlayer(scenesToBuild,
+        BuildPipeline.BuildPlayer(scenesToBuild.ToArray(),
                                   buildToLocation + "" + projectName + ".exe",
                                   BuildTarget.StandaloneWindows64,
                                   BuildOptions.Il2CPP);
