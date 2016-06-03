@@ -2,10 +2,27 @@ from subprocess import call
 import os
 from contextlib import contextmanager
 
-from datetime import datetime
+from datetime import datetime, date
+import time
+
 from threading import Timer
 
 from tkinter import *
+
+#
+# class BuildAutomator:
+#     def __init__(self):
+#         self.testNum = 4
+
+#TODO: add a link to the Log Files for easy lookup if something broke
+#TODO: UI?
+
+def getKickoffTime():
+    return datetime.now().strftime("%Y-%m-%d_%T")
+
+
+buildTime = getKickoffTime()
+
 
 pathToUnityExec = "C:\\Program Files\\Unity\\Editor"
 pathToUnityProject = "D:\\Repositories\\Git\\TestProjectBehind\\TestProject"
@@ -19,7 +36,7 @@ pathToRepo = "D:\\Repositories\\Git\\TestProjectBehind"
 remote = "origin"
 branch = "master"
 
-
+#GET THE LATEST CHANGES FROM THE REPO
 def updateRepo():
     #enter repository directory so we can call git commands
     os.chdir(pathToRepo)
@@ -27,9 +44,10 @@ def updateRepo():
     call ("dir", shell = TRUE) #print out for debugging so we know where we are
 
     #update to the latest version of the repository
-    call (["git", "pull", remote], shell = TRUE)
-    call (["git", "checkout", branch], shell = TRUE)
+    call (["git", "pull", remote], shell = TRUE)    #pull latest changes
+    call (["git", "checkout", branch], shell = TRUE)#make sure we're on the right branch
 
+#CALL TO UNITY TO MAKE A BUILD
 def buildUnityProject():
     #navigate to the install location of Unity so we can use command line build
     os.chdir(pathToUnityExec);
@@ -37,8 +55,24 @@ def buildUnityProject():
     #call (["Unity.exe", platformToBuildTo, pathToUnityProject])
     call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame", pathToPlaceBuild, projectName], shell = TRUE)
 
+
+#print(time.strftime(%Y))
+print("\n---------------------------------------\n")
+print("Retrieving latest build from Remote: {0}, Branch {1}".format(remote.encode("utf-8"), branch.encode("utf-8")))
+print("\n---------------------------------------\n")
+
 updateRepo()
+
+print("\n---------------------------------------\n")
+print("Repo Update Complete, Attempting to Build Project")
+print("\n---------------------------------------\n")
+
 buildUnityProject()
+
+print("\n---------------------------------------\n")
+print("BUILD COMPLETE")
+print("\n---------------------------------------\n")
+
 
 # call ("git", shell = TRUE)
 
