@@ -19,8 +19,10 @@ import getpass
 #         self.testNum = 4
 
 #TODO: Don't make build if the Pull doesn't have anything new
+#TODO: Make sure a build can't interrupt another build
 #TODO: set values via an .ini file?
 #TODO: allow for platform build specification (win64, linux32, android, etc)
+#TODO: queue multiple builds (do win64, then android, etc)
 #TODO: allow for build options (currently set to IL2CPP, but could set to None, Developer Build, Link Profiler, etc)
 #TODO: make it easy to get to Log Files if something broke (already have Link setup to work on a per-user level)
 #TODO: UI? (modify that .ini file, display current state of script)
