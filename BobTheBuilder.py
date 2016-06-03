@@ -7,26 +7,37 @@ from threading import Timer
 
 from tkinter import *
 
+pathToUnityExecutable = "C:\Program Files\Unity\Editor"
+pathToUnityProject = "D:\Repositories\Git\TestProjectBehind\TestProject"
+
+platformToBuildTo = "-buildWindows64Player"
+pathToPlaceBuild = ""
 
 pathToRepo = "D:\Repositories\Git\TestProjectBehind"
 # pathToRepo = "D:\Repositories\Git\TestProjectPlsIgnore"
-
 remote = "origin"
 branch = "master"
 
 
-def start():
-    # call ("cd " + pathToRepo, shell = TRUE)
+def updateRepo():
+    #enter repository directory so we can call git commands
+    os.chdir(pathToRepo)
 
-    # with cd(pathToRepo):
-    #call ("dir", shell = TRUE)
+    call ("dir", shell = TRUE) #print out for debugging so we know where we are
 
-    os.chdir(pathToRepo) #get to the directory of the repository
-    call ("dir", shell = TRUE)
+    #update to the latest version of the repository
     call (["git", "pull", remote], shell = TRUE)
     call (["git", "checkout", branch], shell = TRUE)
 
-start()
+def buildUnityProject():
+    #navigate to the install location of Unity so we can use command line build
+    os.chdir(pathToUnityExecutable);
+
+    #call (["Unity.exe", platformToBuildTo, pathToUnityProject])
+    call (["Unity.exe", "-quit", "-batchmod" "-executemethod BuildTool.BuildStandaloneGame"])
+
+#updateRepo()
+
 
 # call ("git", shell = TRUE)
 
@@ -37,5 +48,3 @@ start()
 # root.geometry("200x300")
 #
 # root.mainloop()
-
-print ("closing window")
