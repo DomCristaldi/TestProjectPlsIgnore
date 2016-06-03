@@ -18,7 +18,7 @@ from tkinter import *
 #TODO: UI?
 
 def getKickoffTime():
-    return datetime.now().strftime("%Y-%m-%d_%T")
+    return datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
 buildTime = getKickoffTime()
@@ -52,8 +52,8 @@ def buildUnityProject():
     #navigate to the install location of Unity so we can use command line build
     os.chdir(pathToUnityExec);
 
-    #call (["Unity.exe", platformToBuildTo, pathToUnityProject])
-    call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame", pathToPlaceBuild, projectName], shell = TRUE)
+    call (["Unity.exe", "-quit", "-batchmode", "-executemethod", "BuildTool.BuildStandaloneGame", pathToPlaceBuild, projectName + "_" + buildTime], shell = TRUE)
+
 
 
 #print(time.strftime(%Y))
