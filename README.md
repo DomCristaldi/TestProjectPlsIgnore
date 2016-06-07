@@ -34,5 +34,3 @@ Some Things to Be Aware Of
 Bob currently does not have a way of communicating what platform to build for or an build options. As such, it is set up to build for Windows 64bit with the IL2CPP Build Option. This can be changed by going into the BuildTool in the Unity Project and changing the setting on the BuildPipeline.BuildPlayer call. It's fairly straightforward to implement, just tedious and at the time of writing this I feel like taking a break and getting some sleep.
 
 This is designed to be an observer that does not push anything. All it does is fast-forward along the branch it monitors. It will only fast-forward right before it attempts to make a build.
-
-Currently it will always try to make a build, even if there are no changes and nothing new was pulled. I need to add checking to see if the pull was a successful fast-forward or if nothing changed.
